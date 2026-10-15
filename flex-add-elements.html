@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,57 +32,68 @@
 <body>
 
     <div class="flex-container" id="target">
-        <div>row item 1</div>
-        <div>row item 2</div>
-        <div>row item 3</div>
+        <div class="divlist">row item 1</div>
+        <div class="divlist">row item 2</div>
+        <div class="divlist">row item 3</div>
     </div>
 
     <p>
-        Press the button to create a new element of type div
-        and then add it to the container.
+        Press the buttons to add or remove elements from the container.
     </p>
 
-    
-		<input type="text" id="itemText" placeholder="Enter an item">
-		<button onclick="makeNewDiv()">Add end</button>
-		<button onclick="addFront()">Add front</button>
+    <input type="text" id="itemText" placeholder="Enter an item">
+
+    <button onclick="makeNewDiv()">Add end</button>
+    <button onclick="addFront()">Add front</button>
+    <button onclick="removeEveryOther()">Remove</button>
 
     <script>
         let count = 3;
 
-				function makeNewDiv() {
-						let container = document.getElementById("target");
+        function makeNewDiv() {
+            let container = document.getElementById("target");
 
-						if (container.children.length >= 10) {
-								alert("Too many items");
-								return;
-						}
+            if (container.children.length >= 10) {
+                alert("Too many items");
+                return;
+            }
 
-						let text = document.getElementById("itemText").value;
+            let text = document.getElementById("itemText").value;
 
-						let element = document.createElement("div");
-						element.innerHTML = text;
+            let element = document.createElement("div");
+            element.textContent = text;
+            element.className = "divlist";
 
-						container.appendChild(element);
-				}
+            container.appendChild(element);
+        }
 
-				function addFront() {
-						let container = document.getElementById("target");
+        function addFront() {
+            let container = document.getElementById("target");
 
-						if (container.children.length >= 10) {
-								alert("Too many items");
-								return;
-						}
+            if (container.children.length >= 10) {
+                alert("Too many items");
+                return;
+            }
 
-						let text = document.getElementById("itemText").value;
+            let text = document.getElementById("itemText").value;
 
-						let element = document.createElement("div");
-						element.innerHTML = text;
+            let element = document.createElement("div");
+            element.textContent = text;
+            element.className = "divlist";
 
-						let first = container.firstChild;
-						container.insertBefore(element, first);
-				}
+            let first = container.firstChild;
+            container.insertBefore(element, first);
+        }
 
+        function removeEveryOther() {
+            let items = document.getElementsByClassName("divlist");
+
+            for (let i = items.length - 1; i >= 0; i--) {
+                if (i % 2 === 0) {
+                    items[i].remove();
+                }
+            }
+        }
     </script>
 
 </body>
