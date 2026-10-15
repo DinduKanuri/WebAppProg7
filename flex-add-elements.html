@@ -46,6 +46,7 @@
     <button onclick="makeNewDiv()">Add end</button>
     <button onclick="addFront()">Add front</button>
     <button onclick="removeEveryOther()">Remove</button>
+    <button onclick="shuffle()">Shuffle</button>
 
     <script>
         let count = 3;
@@ -93,6 +94,32 @@
                     items[i].remove();
                 }
             }
+        }
+
+        // Bonus: Randomly swap two div elements
+        function shuffle() {
+            let container = document.getElementById("target");
+            let items = container.getElementsByClassName("divlist");
+
+            if (items.length < 2) {
+                return;
+            }
+
+            let first = Math.floor(Math.random() * items.length);
+            let second = Math.floor(Math.random() * items.length);
+
+            while (first === second) {
+                second = Math.floor(Math.random() * items.length);
+            }
+
+            let firstElement = items[first];
+            let secondElement = items[second];
+
+            let marker = document.createComment("swap");
+
+            container.replaceChild(marker, firstElement);
+            container.replaceChild(firstElement, secondElement);
+            container.replaceChild(secondElement, marker);
         }
     </script>
 

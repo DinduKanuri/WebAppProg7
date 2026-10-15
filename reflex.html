@@ -3,101 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reflex Countdown Game</title>
+    <title>Reflex Game</title>
 </head>
 <body>
 
-    <h1>Dindu reflexes</h1>
+    <h1>Reflex Game</h1>
+
+    <p>Click Start to begin the countdown. Click Stop as soon as you see GO!</p>
 
     <div id="target">Your time</div>
-
     <div id="counter">Count</div>
 
-    <br>
+    <button onclick="startTime()">Start Timer</button>
+    <button onclick="stopTime()">Stop Timer</button>
 
-    <button id="go" onclick="beginTime()">Go</button>
+    <script>
+        let startTimeValue = 0;
+        let timer = null;
+        let count = 0;
+        let gameStarted = false;
+        let canStop = false;
 
-    <button id="halt" onclick="recordTime()">Halt</button>
+        function startTime() {
+            clearTimeout(timer);
 
-    
+            count = Math.floor(Math.random() * 9) + 2;
 
-<script>
-    let haltTime = undefined;
-    let startTime = undefined;
-    let gameStarted = false;
-    let ready = false;
-    let timers = [];
+            document.getElementById("counter").innerHTML = count;
+            document.getElementById("target").innerHTML = "Get Ready!";
 
-    function recordTime() {
-        if (!gameStarted) {
-            return;
+            gameStarted = true;
+            canStop = false;
+
+            countdown();
         }
 
-        if (!ready) {
-            document.getElementById("target").innerHTML = "Too early!";
-            gameStarted = false;
-            clearTimers();
-            return;
+        function countdown() {
+            if (count > 0) {
+                document.getElementById("counter").innerHTML = count;
+                count--;
+
+                timer = setTimeout(countdown, 1000);
+            } else {
+                document.getElementById("counter").innerHTML = "GO!";
+                document.getElementById("target").innerHTML = "Click Stop Now!";
+
+                startTimeValue = new Date().getTime();
+                canStop = true;
+            }
         }
 
-        haltTime = new Date();
-        let time = haltTime - startTime;
+        function stopTime() {
+            if (!gameStarted) {
+                document.getElementById("target").innerHTML = "Click Start First!";
+                return;
+            }
 
-        document.getElementById("target").innerHTML =
-            "Your time: " + time + " milliseconds";
+            if (!canStop) {
+                clearTimeout(timer);
 
-        gameStarted = false;
-    }
+                document.getElementById("target").innerHTML = "Too Soon!";
+                document.getElementById("counter").innerHTML = "Try Again";
 
-    function clearTimers() {
-        for (let i = 0; i < timers.length; i++) {
-            clearTimeout(timers[i]);
-        }
-        timers = [];
-    }
+                gameStarted = false;
+                return;
+            }
 
-    function beginTime() {
-        clearTimers();
+            let endTime = new Date().getTime();
+            let reactionTime = endTime - startTimeValue;
 
-        haltTime = undefined;
-        startTime = undefined;
-        gameStarted = true;
-        ready = false;
-
-        document.getElementById("target").innerHTML = "Get ready!";
-        document.getElementById("counter").innerHTML = "Starting...";
-
-        for (let i = 5; i >= 1; i--) {
-            let timer = setTimeout(function() {
-                document.getElementById("counter").innerHTML = i;
-            }, (5 - i) * 1000);
-
-            timers.push(timer);
-        }
-
-        let finalTimer = setTimeout(function() {
-            startTime = new Date();
-            ready = true;
-
-            document.getElementById("counter").innerHTML = "GO!";
             document.getElementById("target").innerHTML =
-                "Click Halt now!";
+                "Your reaction time is " + reactionTime + " milliseconds";
 
-            let slowTimer = setTimeout(function() {
-                if (gameStarted) {
-                    document.getElementById("target").innerHTML = "Too slow!";
-                    gameStarted = false;
-                }
-            }, 3000);
+            document.getElementById("counter").innerHTML = "Finished!";
 
-            timers.push(slowTimer);
-        }, 5000);
-
-        timers.push(finalTimer);
-    }
-</script>
-
-
+            gameStarted = false;
+            canStop = false;
+        }
+    </script>
 
 </body>
 </html>
