@@ -1,50 +1,88 @@
 <!DOCTYPE html>
-<html> <head> <style>
-    .flex-container {
-      display: flex;  flex-direction:row;
-      background-color: red;
-  }
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flex Add Elements</title>
 
-.flex-container > div {  /*div children of the flex container*/
-  background-color: #f1f1f1; 
-  margin: 10px;  padding: 20px;  font-size: 30px;
-}
+    <style>
+        .flex-container {
+            display: flex;
+            flex-direction: row;
+            background-color: red;
+        }
 
-/* Responsive layout */
-@media (max-width: 600px) { 
-	 .flex-container{
-		 flex-direction:column;
-		 background-color: green;
-	  }
-	}
-</style></head>
+        .flex-container > div {
+            background-color: #f1f1f1;
+            margin: 10px;
+            padding: 20px;
+            font-size: 30px;
+        }
 
-
+        @media (max-width: 600px) {
+            .flex-container {
+                flex-direction: column;
+                background-color: green;
+            }
+        }
+    </style>
+</head>
 
 <body>
-		<div class="flex-container" id="target">
-		  <div>row item 1</div>   
-		  <div>row item 2</div>  
-		  <div>row item 3</div>  
-		</div>
-	
-	<p> Press the button to create an new element of type div and then add it to the container.
-		</p>
-		<button onclick="makeNewDiv()">Add one</button>
-	
-	
-</body>
-<script>
-	function makeNewDiv(){
-		/* make the div and its text */
-		let element = document.createElement("div")
-		element.innerHTML = "an item after 3"
-		element.style.color = "orange"
 
-		/* add it to the container */
-		let container = document.getElementById('target')
-		container.appendChild(element)
-		
-	}
-</script>
-</html>	
+    <div class="flex-container" id="target">
+        <div>row item 1</div>
+        <div>row item 2</div>
+        <div>row item 3</div>
+    </div>
+
+    <p>
+        Press the button to create a new element of type div
+        and then add it to the container.
+    </p>
+
+    
+		<input type="text" id="itemText" placeholder="Enter an item">
+		<button onclick="makeNewDiv()">Add end</button>
+		<button onclick="addFront()">Add front</button>
+
+    <script>
+        let count = 3;
+
+				function makeNewDiv() {
+						let container = document.getElementById("target");
+
+						if (container.children.length >= 10) {
+								alert("Too many items");
+								return;
+						}
+
+						let text = document.getElementById("itemText").value;
+
+						let element = document.createElement("div");
+						element.innerHTML = text;
+
+						container.appendChild(element);
+				}
+
+				function addFront() {
+						let container = document.getElementById("target");
+
+						if (container.children.length >= 10) {
+								alert("Too many items");
+								return;
+						}
+
+						let text = document.getElementById("itemText").value;
+
+						let element = document.createElement("div");
+						element.innerHTML = text;
+
+						let first = container.firstChild;
+						container.insertBefore(element, first);
+				}
+
+    </script>
+
+</body>
+</html>
