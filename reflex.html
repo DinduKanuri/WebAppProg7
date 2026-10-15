@@ -19,14 +19,85 @@
 
     <button id="halt" onclick="recordTime()">Halt</button>
 
-    <script>
-        let haltTime = undefined;
+    
 
-        function recordTime() {
-            haltTime = Date.now();
-            console.log(haltTime);
+<script>
+    let haltTime = undefined;
+    let startTime = undefined;
+    let gameStarted = false;
+    let ready = false;
+    let timers = [];
+
+    function recordTime() {
+        if (!gameStarted) {
+            return;
         }
-    </script>
+
+        if (!ready) {
+            document.getElementById("target").innerHTML = "Too early!";
+            gameStarted = false;
+            clearTimers();
+            return;
+        }
+
+        haltTime = new Date();
+        let time = haltTime - startTime;
+
+        document.getElementById("target").innerHTML =
+            "Your time: " + time + " milliseconds";
+
+        gameStarted = false;
+    }
+
+    function clearTimers() {
+        for (let i = 0; i < timers.length; i++) {
+            clearTimeout(timers[i]);
+        }
+        timers = [];
+    }
+
+    function beginTime() {
+        clearTimers();
+
+        haltTime = undefined;
+        startTime = undefined;
+        gameStarted = true;
+        ready = false;
+
+        document.getElementById("target").innerHTML = "Get ready!";
+        document.getElementById("counter").innerHTML = "Starting...";
+
+        for (let i = 5; i >= 1; i--) {
+            let timer = setTimeout(function() {
+                document.getElementById("counter").innerHTML = i;
+            }, (5 - i) * 1000);
+
+            timers.push(timer);
+        }
+
+        let finalTimer = setTimeout(function() {
+            startTime = new Date();
+            ready = true;
+
+            document.getElementById("counter").innerHTML = "GO!";
+            document.getElementById("target").innerHTML =
+                "Click Halt now!";
+
+            let slowTimer = setTimeout(function() {
+                if (gameStarted) {
+                    document.getElementById("target").innerHTML = "Too slow!";
+                    gameStarted = false;
+                }
+            }, 3000);
+
+            timers.push(slowTimer);
+        }, 5000);
+
+        timers.push(finalTimer);
+    }
+</script>
+
+
 
 </body>
 </html>
